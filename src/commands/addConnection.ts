@@ -1,13 +1,13 @@
 import BaseCommand from "../common/baseCommand";
 import * as vscode from 'vscode';
-import { PostgreSQLTreeDataProvider } from "../tree/treeProvider";
+import { NetezzaTreeDataProvider } from "../tree/treeProvider";
 import { IConnection } from "../common/IConnection";
 import { Constants } from "../common/constants";
 import { v1 as uuidv1 } from 'uuid';
 import { Global } from "../common/global";
 import { MultiStepInput, InputFlowAction } from "../common/multiStepInput";
 import { Database } from "../common/database";
-import { PgClient } from '../common/connection';
+import { NzClient } from '../common/connection';
 
 'use strict';
 
@@ -37,7 +37,7 @@ export class addConnectionCommand extends BaseCommand {
     }
     
     // create the db connection
-    const tree = PostgreSQLTreeDataProvider.getInstance();
+    const tree = NetezzaTreeDataProvider.getInstance();
 
     let connections = tree.context.globalState.get<{ [key: string]: IConnection }>(Constants.GlobalStateKey);
     if (!connections) connections = {};
@@ -81,7 +81,7 @@ export class addConnectionCommand extends BaseCommand {
       title: this.TITLE,
       step: input.CurrentStepNumber,
       totalSteps: this.TotalSteps,
-      prompt: 'The PostgreSQL user to authenticate as',
+      prompt: 'The Netezza user to authenticate as',
       placeholder: 'ex. root',
       ignoreFocusOut: true,
       value: (typeof state.user === 'string') ? state.user : '',
@@ -95,7 +95,7 @@ export class addConnectionCommand extends BaseCommand {
       title: this.TITLE,
       step: input.CurrentStepNumber,
       totalSteps: this.TotalSteps,
-      prompt: 'The password of the PostgreSQL user',
+      prompt: 'The password of the Netezza user',
       placeholder: '',
       ignoreFocusOut: true,
       password: true,
@@ -142,7 +142,7 @@ export class addConnectionCommand extends BaseCommand {
 
   async setDatabase(input: MultiStepInput, state: Partial<ConnectionState>) {
     // first need the databases
-    let connection: PgClient = null;
+    let connection: NzClient = null;
 
     let databases: DatabaseQuickPickItem[] = [];
     let connectionError: any = null;
@@ -154,11 +154,11 @@ export class addConnectionCommand extends BaseCommand {
         password: state.password,
         port: state.port,
         ssl: state.secure
-      }, 'postgres');
-      const res = await connection.query('SELECT datname FROM pg_database WHERE datistemplate = false;');
+      }, 'netezza');
+      const res = await connection.query('SELECT datname FROM nz_database WHERE datistemplate = false;');
       databases = res.rows.map<DatabaseQuickPickItem>(database => ({label: database.datname, dbname: database.datname}));
     } catch(err) {
-      if (err.message === `permission denied for database "postgres"`) {
+      if (err.message === `permission denied for database "SYSTEM"`) {
         // Heroku message anyway... probably varies
         // is there another common parameter could be checked?
       } else {
@@ -187,7 +187,7 @@ export class addConnectionCommand extends BaseCommand {
         });
 
         try {
-          let databaseToTry = state.database && state.database.trim() ? state.database : 'postgres';
+          let databaseToTry = state.database && state.database.trim() ? state.database : 'netezza';
           connection = await Database.createConnection({
             label: '',
             host: state.host,

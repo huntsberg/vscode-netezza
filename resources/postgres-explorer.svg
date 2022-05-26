@@ -10,7 +10,7 @@
    viewBox="0 0 50 50"
    version="1.1"
    id="svg7"
-   sodipodi:docname="postgres-explorer2.svg"
+   sodipodi:docname="netezza-explorer2.svg"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
   <defs
      id="defs11" />
@@ -39,8 +39,8 @@
     <rdf:RDF>
       <rdf:Description
          about="https://iconscout.com/legal#licenses"
-         dc:title="postgresql,filled"
-         dc:description="postgresql,filled"
+         dc:title="netezza,filled"
+         dc:description="netezza,filled"
          dc:publisher="Iconscout"
          dc:date="2017-12-09"
          dc:format="image/svg+xml"

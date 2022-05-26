@@ -5,7 +5,7 @@ import {
   CompletionItem, CompletionItemKind,
   SignatureHelp, SignatureInformation, ParameterInformation, TextDocumentSyncKind
 } from 'vscode-languageserver/node';
-import { PgClient } from '../common/connection';
+import { NzClient } from '../common/connection';
 import * as fs from 'fs';
 import { Validator } from './validator';
 import { IConnection as IDBConnection } from '../common/IConnection';
@@ -86,7 +86,7 @@ let databaseCache: string[] = [];
   */
 
 let connection: Connection = createConnection(new IPCMessageReader(process), new IPCMessageWriter(process));
-let dbConnection: PgClient = null,
+let dbConnection: NzClient = null,
     dbConnOptions: IDBConnection = null;
 
 console.log = connection.console.log.bind(connection.console);
@@ -144,7 +144,7 @@ async function setupDBConnection(connectionOptions: IDBConnection, uri: string):
         user: connectionOptions.user,
         password: connectionOptions.password,
         port: connectionOptions.port,
-        database: 'postgres',
+        database: 'netezza',
         multipleStatements: connectionOptions.multipleStatements,
         certPath: connectionOptions.certPath,
         ssl: connectionOptions.ssl
@@ -155,18 +155,18 @@ async function setupDBConnection(connectionOptions: IDBConnection, uri: string):
       connectionOptions.ssl = {rejectUnauthorized: false};
     }
     
-    dbConnection = new PgClient(connectionOptions);
+    dbConnection = new NzClient(connectionOptions);
     await dbConnection.connect();
     const versionRes = await dbConnection.query(`SELECT current_setting('server_version_num') as ver_num;`);
     let versionNumber = parseInt(versionRes.rows[0].ver_num);
-    dbConnection.pg_version = versionNumber;
+    dbConnection.nz_version = versionNumber;
     dbConnection.on('end', dbConnectionEnded);
 
     loadCompletionCache(connectionOptions);
 
     if (uri) {
       let document = documents.get(uri);
-      if (document && document.languageId === 'postgres') {
+      if (document && document.languageId === 'netezza') {
         validateTextDocument(document);
       }
     }
@@ -177,16 +177,16 @@ async function setupDBConnection(connectionOptions: IDBConnection, uri: string):
 async function loadCompletionCache(connectionOptions: IDBConnection) {
   if (!connectionOptions || !dbConnection) return;
   // setup database caches for schemas, functions, tables, and fields
-  let vQueries = SqlQueryManager.getVersionQueries(dbConnection.pg_version);
+  let vQueries = SqlQueryManager.getVersionQueries(dbConnection.nz_version);
   try {
     if (connectionOptions.database) {
       let schemas = await dbConnection.query(`
         SELECT nspname as name
-        FROM pg_namespace
+        FROM nz_namespace
         WHERE
-          nspname not in ('information_schema', 'pg_catalog', 'pg_toast')
-          AND nspname not like 'pg_temp_%'
-          AND nspname not like 'pg_toast_temp_%'
+          nspname not in ('information_schema', 'nz_catalog', 'nz_toast')
+          AND nspname not like 'nz_temp_%'
+          AND nspname not like 'nz_toast_temp_%'
           AND has_schema_privilege(oid, 'CREATE, USAGE')
         ORDER BY nspname;
         `);
@@ -200,9 +200,9 @@ async function loadCompletionCache(connectionOptions: IDBConnection) {
   try {
     if (connectionOptions.database) {
       /*
-      SELECT tablename as name, true as is_table FROM pg_tables WHERE schemaname not in ('information_schema', 'pg_catalog')
+      SELECT tablename as name, true as is_table FROM nz_tables WHERE schemaname not in ('information_schema', 'nz_catalog')
       union all
-      SELECT viewname as name, false as is_table FROM pg_views WHERE schemaname not in ('information_schema', 'pg_catalog') order by name;
+      SELECT viewname as name, false as is_table FROM nz_views WHERE schemaname not in ('information_schema', 'nz_catalog') order by name;
       */
       let tablesAndColumns = await dbConnection.query(`
         SELECT
@@ -219,13 +219,13 @@ async function loadCompletionCache(connectionOptions: IDBConnection) {
               (quote_ident(n.nspname) || '.' || quote_ident(c.relname)) as quoted_name,
               true as is_table
             FROM
-              pg_catalog.pg_class c
-              JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+              nz_catalog.nz_class c
+              JOIN nz_catalog.nz_namespace n ON n.oid = c.relnamespace
             WHERE
               c.relkind = 'r'
-              AND n.nspname not in ('information_schema', 'pg_catalog', 'pg_toast')
-              AND n.nspname not like 'pg_temp_%'
-              AND n.nspname not like 'pg_toast_temp_%'
+              AND n.nspname not in ('information_schema', 'nz_catalog', 'nz_toast')
+              AND n.nspname not like 'nz_temp_%'
+              AND n.nspname not like 'nz_toast_temp_%'
               AND has_schema_privilege(n.oid, 'USAGE') = true
               AND has_table_privilege(quote_ident(n.nspname) || '.' || quote_ident(c.relname), 'SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER') = true
             union all
@@ -235,13 +235,13 @@ async function loadCompletionCache(connectionOptions: IDBConnection) {
               (quote_ident(n.nspname) || '.' || quote_ident(c.relname)) as quoted_name,
               false as is_table
             FROM
-              pg_catalog.pg_class c
-              JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+              nz_catalog.nz_class c
+              JOIN nz_catalog.nz_namespace n ON n.oid = c.relnamespace
             WHERE
               c.relkind in ('v', 'm')
-              AND n.nspname not in ('information_schema', 'pg_catalog', 'pg_toast')
-              AND n.nspname not like 'pg_temp_%'
-              AND n.nspname not like 'pg_toast_temp_%'
+              AND n.nspname not in ('information_schema', 'nz_catalog', 'nz_toast')
+              AND n.nspname not like 'nz_temp_%'
+              AND n.nspname not like 'nz_toast_temp_%'
               AND has_schema_privilege(n.oid, 'USAGE') = true
               AND has_table_privilege(quote_ident(n.nspname) || '.' || quote_ident(c.relname), 'SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER') = true
           ) as tbl
@@ -253,7 +253,7 @@ async function loadCompletionCache(connectionOptions: IDBConnection) {
               attnum,
               attisdropped
             FROM
-              pg_attribute
+              nz_attribute
           ) as a ON (
             a.attrelid = tbl.quoted_name::regclass
             AND a.attnum > 0
@@ -294,7 +294,7 @@ async function loadCompletionCache(connectionOptions: IDBConnection) {
   }
 
   try {
-    let keywords = await dbConnection.query(`select * from pg_get_keywords();`);
+    let keywords = await dbConnection.query(`select * from nz_get_keywords();`);
     keywordCache = keywords.rows.map<string>(rw => rw.word.toLocaleUpperCase());
   }
   catch (err) {
@@ -304,7 +304,7 @@ async function loadCompletionCache(connectionOptions: IDBConnection) {
   try {
     let databases = await dbConnection.query(`
     SELECT datname
-    FROM pg_database
+    FROM nz_database
     WHERE
       datistemplate = false
       AND has_database_privilege(quote_ident(datname), 'TEMP, CONNECT') = true

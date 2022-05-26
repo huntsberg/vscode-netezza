@@ -5,7 +5,7 @@ import { EditorState } from "../common/editorState";
 import { Global } from "../common/global";
 import { ConnectionQuickPickItem } from "../common/IConnQuickPick";
 import { Constants } from "../common/constants";
-import { PostgreSQLTreeDataProvider } from "../tree/treeProvider";
+import { NetezzaTreeDataProvider } from "../tree/treeProvider";
 
 'use strict';
 
@@ -35,14 +35,14 @@ export class editConnectionCommand extends BaseCommand {
       selectedConnId = hostToSelect.connection_key;
     }
 
-    const configDocument = await vscode.workspace.openTextDocument(vscode.Uri.parse(`postgres-config:/${selectedConnId}.json`));
+    const configDocument = await vscode.workspace.openTextDocument(vscode.Uri.parse(`netezza-config:/${selectedConnId}.json`));
     await vscode.window.showTextDocument(configDocument);
     // const label = await vscode.window.showInputBox({ prompt: "The display name of the database connection", placeHolder: "label", ignoreFocusOut: true });
     // selectedConnection.label = label;
     
     // connections[selectedConnId] = selectedConnection;
 
-    // const tree = PostgreSQLTreeDataProvider.getInstance();
+    // const tree = NetezzaTreeDataProvider.getInstance();
     // await tree.context.globalState.update(Constants.GlobalStateKey, connections);
     // tree.refresh();
   }

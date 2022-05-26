@@ -5,7 +5,7 @@ import { EditorState } from "../common/editorState";
 import { Database } from "../common/database";
 import { Global } from '../common/global';
 import { SqlQueryManager } from '../queries';
-import { QueryResult } from "pg";
+import { QueryResult } from "nz";
 
 export class selectTopCommand extends BaseCommand {
 
@@ -36,7 +36,7 @@ export class selectTopCommand extends BaseCommand {
       if (!sortOptions[configSort]) sortOptions[configSort] = 'a.attnum';
 
       let tableSchema = treeNode.schema ?? 'public';
-      let query = SqlQueryManager.getVersionQueries(connection.pg_version);
+      let query = SqlQueryManager.getVersionQueries(connection.nz_version);
 
       try {
         let res: QueryResult = null;
@@ -60,7 +60,7 @@ export class selectTopCommand extends BaseCommand {
 
     const sql = `SELECT ${columnsToSelect.join(', ')} FROM ${treeNode.getQuotedTableName()} LIMIT ${count};`
     if (!runOnly) {
-      const textDocument = await vscode.workspace.openTextDocument({content: sql, language: 'postgres'});
+      const textDocument = await vscode.workspace.openTextDocument({content: sql, language: 'netezza'});
       await vscode.window.showTextDocument(textDocument);
       EditorState.connection = treeNode.connection;
     }

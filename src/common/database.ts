@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import * as path from 'path';
-// import { Pool, Client, types, ClientConfig } from 'pg';
-import { PgClient } from './connection';
+// import { Pool, Client, types, ClientConfig } from 'nz';
+import { NzClient } from './connection';
 import { IConnection } from "./IConnection";
 import { OutputChannel } from './outputChannel';
 import { performance } from 'perf_hooks';
@@ -44,7 +44,7 @@ let queryCounter: number = 0;
 
 export class Database {
 
-  // could probably be simplified, essentially matches Postgres' built-in algorithm without the char pointers
+  // could probably be simplified, essentially matches Netezza' built-in algorithm without the char pointers
   static getQuotedIdent(name: string): string {
     let result = '"';
     for (let i = 0; i < name.length; i++) {
@@ -69,7 +69,7 @@ export class Database {
     };
   }
 
-  public static async createConnection(connection: IConnection, dbname?: string): Promise<PgClient> {
+  public static async createConnection(connection: IConnection, dbname?: string): Promise<NzClient> {
     const connectionOptions: any = Object.assign({}, connection);
     connectionOptions.database = dbname ? dbname : connection.database;
     if (connectionOptions.certPath && fs.existsSync(connectionOptions.certPath)) {
@@ -83,7 +83,7 @@ export class Database {
       connectionOptions.ssl = {rejectUnauthorized: false};
     }
 
-    let client = new PgClient(connectionOptions);
+    let client = new NzClient(connectionOptions);
     await client.connect();
     const versionRes = await client.query(`SELECT current_setting('server_version_num') as ver_num;`);
     /*
@@ -92,7 +92,7 @@ export class Database {
     });
     */
     let versionNumber = parseInt(versionRes.rows[0].ver_num);
-    client.pg_version = versionNumber;
+    client.nz_version = versionNumber;
     return client;
   }
 
@@ -127,7 +127,7 @@ export class Database {
   public static async runQuery(sql: string, editor: vscode.TextEditor, connectionOptions: IConnection, showInCurrentPanel: boolean = false) {
     // let uri = editor.document.uri.toString();
     // let title = path.basename(editor.document.fileName);
-    // let resultsUri = vscode.Uri.parse('postgres-results://' + uri);
+    // let resultsUri = vscode.Uri.parse('netezza-results://' + uri);
     let uri: string = '';
     let title: string = '';
     if (showInCurrentPanel) {
@@ -138,14 +138,14 @@ export class Database {
       uri = editor.document.uri.toString();
       title = path.basename(editor.document.fileName);
     }
-    let resultsUri = vscode.Uri.parse('postgres-results://' + uri);
+    let resultsUri = vscode.Uri.parse('netezza-results://' + uri);
 
     OutputChannel.displayMessage(resultsUri, 'Results: ' + title, 'Waiting for the query to complete...', showInCurrentPanel);
-    let connection: PgClient = null;
+    let connection: NzClient = null;
     try {
       let startTime = performance.now();
       connection = await Database.createConnection(connectionOptions);
-      const typeNamesQuery = `select oid, format_type(oid, typtypmod) as display_type, typname from pg_type`;
+      const typeNamesQuery = `select oid, format_type(oid, typtypmod) as display_type, typname from nz_type`;
       const types: TypeResults = await connection.query(typeNamesQuery);
       const res: QueryResults | QueryResults[] = await connection.query({ text: sql, rowMode: 'array' });
       const results: QueryResults[] = Array.isArray(res) ? res : [res];

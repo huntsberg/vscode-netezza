@@ -12,11 +12,11 @@ export class selectDatabaseCommand extends BaseCommand {
     let connectionDetails: IConnection = EditorState.connection;
     if (!connectionDetails) return;
     
-    const connection = await Database.createConnection(connectionDetails, 'postgres');
+    const connection = await Database.createConnection(connectionDetails, 'netezza');
 
     let databases: string[] = [];
     try {
-      const res = await connection.query('SELECT datname FROM pg_database WHERE datistemplate = false;');
+      const res = await connection.query('SELECT datname FROM nz_database WHERE datistemplate = false;');
       databases = res.rows.map<string>(database => database.datname);
     } finally {
       await connection.end();

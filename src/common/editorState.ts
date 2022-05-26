@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { IConnection } from './IConnection';
-import PostgreSQLLanguageClient from '../language/client';
+import NetezzaLanguageClient from '../language/client';
 import { Global } from './global';
 import { Constants } from './constants';
 import { Database } from './database';
@@ -12,13 +12,13 @@ export class EditorState {
   private statusBarDatabase: vscode.StatusBarItem;
   private statusBarServer: vscode.StatusBarItem;
 
-  constructor(private readonly languageClient: PostgreSQLLanguageClient) {
+  constructor(private readonly languageClient: NetezzaLanguageClient) {
     vscode.window.onDidChangeActiveTextEditor(this.onDidChangeActiveTextEditor, this);
     vscode.workspace.onDidCloseTextDocument(this.onDidCloseTextDocument, this);
     vscode.workspace.onDidOpenTextDocument(this.onDidOpenTextDocument, this);
   }
 
-  static getInstance(languageClient?: PostgreSQLLanguageClient) {
+  static getInstance(languageClient?: NetezzaLanguageClient) {
     if (!EditorState._instance && languageClient) EditorState._instance = new EditorState(languageClient);
     return EditorState._instance;
   }
@@ -83,11 +83,11 @@ export class EditorState {
 
     let defaultDatabase = Global.Configuration.get<string>("defaultDatabase");
     if (defaultDatabase) {
-      const conn = await Database.createConnection(connection, 'postgres');
+      const conn = await Database.createConnection(connection, 'netezza');
 
       let databases: string[] = [];
       try {
-        const res = await conn.query('SELECT datname FROM pg_database WHERE datistemplate = false;');
+        const res = await conn.query('SELECT datname FROM nz_database WHERE datistemplate = false;');
         databases = res.rows.map<string>(database => database.datname);
       } finally {
         await conn.end();
@@ -119,7 +119,7 @@ export class EditorState {
     }
     
     this.statusBarServer.text = `$(server) ${conn.label || conn.host}`;
-    this.statusBarServer.command = 'vscode-postgres.selectConnection';
+    this.statusBarServer.command = 'vscode-netezza.selectConnection';
     this.statusBarServer.show();
 
     // if (!conn.database) {
@@ -140,7 +140,7 @@ export class EditorState {
     } else {
       this.statusBarDatabase.text = `$(database) ${conn.database}`;
     }
-    this.statusBarDatabase.command = 'vscode-postgres.selectDatabase';
+    this.statusBarDatabase.command = 'vscode-netezza.selectDatabase';
     this.statusBarDatabase.show();
   }
 
@@ -152,8 +152,8 @@ export class EditorState {
       this.statusBarServer.tooltip = 'Change Active Server';
     }
     
-    this.statusBarServer.text = `$(server) Select Postgres Server`;
-    this.statusBarServer.command = 'vscode-postgres.selectConnection';
+    this.statusBarServer.text = `$(server) Select Netezza Server`;
+    this.statusBarServer.command = 'vscode-netezza.selectConnection';
     this.statusBarServer.show();
   }
 

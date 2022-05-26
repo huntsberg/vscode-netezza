@@ -4,7 +4,7 @@ import { disposeAll } from './common';
 import { QueryResults } from '../common/database';
 
 export class ResultsManager implements vscode.WebviewPanelSerializer {
-  private static readonly pgsqlResultContextKey = 'vscodePostgresResultFocus';
+  private static readonly nzsqlResultContextKey = 'vscodeNetezzaResultFocus';
   private readonly _results: ResultView[] = [];
   private _activeResults: ResultView | undefined = undefined;
   private readonly _disposables: vscode.Disposable[] = [];
@@ -72,7 +72,7 @@ export class ResultsManager implements vscode.WebviewPanelSerializer {
 
     view.onDidChangeViewState(({ webviewPanel }) => {
       disposeAll(this._results.filter(otherView => view !== otherView && view!.matches(otherView)));
-      vscode.commands.executeCommand('setContext', ResultsManager.pgsqlResultContextKey, webviewPanel.visible && webviewPanel.active);
+      vscode.commands.executeCommand('setContext', ResultsManager.nzsqlResultContextKey, webviewPanel.visible && webviewPanel.active);
 
       this._activeResults = webviewPanel.active ? view : undefined;
     });

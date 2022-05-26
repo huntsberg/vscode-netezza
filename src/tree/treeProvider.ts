@@ -5,18 +5,18 @@ import { Global } from '../common/global';
 import { IConnection } from '../common/IConnection';
 import { ConnectionNode } from './connectionNode';
 
-export class PostgreSQLTreeDataProvider implements vscode.TreeDataProvider<INode> {
+export class NetezzaTreeDataProvider implements vscode.TreeDataProvider<INode> {
 
   public _onDidChangeTreeData: vscode.EventEmitter<INode> = new vscode.EventEmitter<INode>();
   public readonly onDidChangeTreeData: vscode.Event<INode> = this._onDidChangeTreeData.event;
-  private static _instance: PostgreSQLTreeDataProvider = null;
+  private static _instance: NetezzaTreeDataProvider = null;
 
   constructor(public context: vscode.ExtensionContext){ this.refresh(); }
 
-  public static getInstance(context?: vscode.ExtensionContext): PostgreSQLTreeDataProvider {
+  public static getInstance(context?: vscode.ExtensionContext): NetezzaTreeDataProvider {
     if (context && !this._instance) {
-      this._instance = new PostgreSQLTreeDataProvider(context);
-      context.subscriptions.push(vscode.window.registerTreeDataProvider("postgres", this._instance));
+      this._instance = new NetezzaTreeDataProvider(context);
+      context.subscriptions.push(vscode.window.registerTreeDataProvider("netezza", this._instance));
     }
     return this._instance;
   }

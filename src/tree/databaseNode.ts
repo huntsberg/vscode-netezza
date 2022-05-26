@@ -14,10 +14,10 @@ export class DatabaseNode implements INode {
     return {
       label: this.connection.database,
       collapsibleState: TreeItemCollapsibleState.Collapsed,
-      contextValue: 'vscode-postgres.tree.database',
+      contextValue: 'vscode-netezza.tree.database',
       command: {
         title: 'select-database',
-        command: 'vscode-postgres.setActiveConnection',
+        command: 'vscode-netezza.setActiveConnection',
         arguments: [ this.connection ]
       },
       iconPath: {
@@ -33,11 +33,11 @@ export class DatabaseNode implements INode {
     try {
       const res = await connection.query(`
       SELECT nspname as name
-      FROM pg_namespace
+      FROM nz_namespace
       WHERE
-        nspname not in ('information_schema', 'pg_catalog', 'pg_toast')
-        AND nspname not like 'pg_temp_%'
-        AND nspname not like 'pg_toast_temp_%'
+        nspname not in ('information_schema', 'nz_catalog', 'nz_toast')
+        AND nspname not like 'nz_temp_%'
+        AND nspname not like 'nz_toast_temp_%'
         AND has_schema_privilege(oid, 'CREATE, USAGE')
       ORDER BY nspname;`);
 

@@ -1,10 +1,10 @@
 // Create a Common DB Connection library both
 // the language server and the client can use
 
-import { Client, ClientConfig } from 'pg';
+import { Client, ClientConfig } from 'nz';
 
-export class PgClient extends Client {
-  pg_version: number;
+export class NzClient extends Client {
+  nz_version: number;
   is_ended: boolean;
 
   constructor(config?: string | ClientConfig) {

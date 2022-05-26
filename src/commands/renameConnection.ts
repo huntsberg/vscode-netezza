@@ -5,7 +5,7 @@ import { EditorState } from "../common/editorState";
 import { Global } from "../common/global";
 import { ConnectionQuickPickItem } from "../common/IConnQuickPick";
 import { Constants } from "../common/constants";
-import { PostgreSQLTreeDataProvider } from "../tree/treeProvider";
+import { NetezzaTreeDataProvider } from "../tree/treeProvider";
 
 'use strict';
 
@@ -43,7 +43,7 @@ export class renameConnectionCommand extends BaseCommand {
     
     connections[selectedConnId] = selectedConnection;
 
-    const tree = PostgreSQLTreeDataProvider.getInstance();
+    const tree = NetezzaTreeDataProvider.getInstance();
     await tree.context.globalState.update(Constants.GlobalStateKey, connections);
     tree.refresh();
   }

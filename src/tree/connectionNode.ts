@@ -14,10 +14,10 @@ export class ConnectionNode implements INode {
     return {
       label: this.connection.label || this.connection.host,
       collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
-      contextValue: "vscode-postgres.tree.connection",
+      contextValue: "vscode-netezza.tree.connection",
       command: {
         title: 'select-database',
-        command: 'vscode-postgres.setActiveConnection',
+        command: 'vscode-netezza.setActiveConnection',
         arguments: [ this.connection ]
       },
       iconPath: {
@@ -31,13 +31,13 @@ export class ConnectionNode implements INode {
     if (this.connection.database) {
       return [new DatabaseNode(this.connection)];
     }
-    const connection = await Database.createConnection(this.connection, 'postgres');
+    const connection = await Database.createConnection(this.connection, 'netezza');
 
     try {
       // Get all database where permission was granted
       const res = await connection.query(`
       SELECT datname
-      FROM pg_database
+      FROM nz_database
       WHERE
         datistemplate = false
         AND has_database_privilege(datname, 'TEMP, CONNECT') = true

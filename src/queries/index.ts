@@ -23,19 +23,19 @@ let queries = {
       `SELECT n.nspname as "schema",
         p.proname as "name",
         d.description,
-        pg_catalog.pg_get_function_result(p.oid) as "result_type",
-        pg_catalog.pg_get_function_arguments(p.oid) as "argument_types",
+        nz_catalog.nz_get_function_result(p.oid) as "result_type",
+        nz_catalog.nz_get_function_arguments(p.oid) as "argument_types",
       CASE
         WHEN p.proisagg THEN 'agg'
         WHEN p.proiswindow THEN 'window'
-        WHEN p.prorettype = 'pg_catalog.trigger'::pg_catalog.regtype THEN 'trigger'
+        WHEN p.prorettype = 'nz_catalog.trigger'::nz_catalog.regtype THEN 'trigger'
         ELSE 'normal'
       END as "type"
-      FROM pg_catalog.pg_proc p
-          LEFT JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace
-          LEFT JOIN pg_catalog.pg_description d ON p.oid = d.objoid
+      FROM nz_catalog.nz_proc p
+          LEFT JOIN nz_catalog.nz_namespace n ON n.oid = p.pronamespace
+          LEFT JOIN nz_catalog.nz_description d ON p.oid = d.objoid
       WHERE n.nspname = $1
-        AND p.prorettype <> 'pg_catalog.trigger'::pg_catalog.regtype
+        AND p.prorettype <> 'nz_catalog.trigger'::nz_catalog.regtype
         AND has_schema_privilege(n.oid, 'USAGE') = true
         AND has_function_privilege(p.oid, 'execute') = true
       ORDER BY 1, 2, 4;`,
@@ -43,20 +43,20 @@ let queries = {
       `SELECT n.nspname as "schema",
         p.proname as "name",
         d.description,
-        pg_catalog.pg_get_function_result(p.oid) as "result_type",
-        pg_catalog.pg_get_function_arguments(p.oid) as "argument_types",
+        nz_catalog.nz_get_function_result(p.oid) as "result_type",
+        nz_catalog.nz_get_function_arguments(p.oid) as "argument_types",
       CASE
         WHEN p.proisagg THEN 'agg'
         WHEN p.proiswindow THEN 'window'
-        WHEN p.prorettype = 'pg_catalog.trigger'::pg_catalog.regtype THEN 'trigger'
+        WHEN p.prorettype = 'nz_catalog.trigger'::nz_catalog.regtype THEN 'trigger'
         ELSE 'normal'
       END as "type"
-      FROM pg_catalog.pg_proc p
-          LEFT JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace
-          LEFT JOIN pg_catalog.pg_description d ON p.oid = d.objoid
+      FROM nz_catalog.nz_proc p
+          LEFT JOIN nz_catalog.nz_namespace n ON n.oid = p.pronamespace
+          LEFT JOIN nz_catalog.nz_description d ON p.oid = d.objoid
       WHERE n.nspname <> 'information_schema'
-        AND pg_catalog.pg_function_is_visible(p.oid)
-        AND p.prorettype <> 'pg_catalog.trigger'::pg_catalog.regtype
+        AND nz_catalog.nz_function_is_visible(p.oid)
+        AND p.prorettype <> 'nz_catalog.trigger'::nz_catalog.regtype
         AND has_schema_privilege(n.oid, 'USAGE') = true
         AND has_function_privilege(p.oid, 'execute') = true
       ORDER BY 1, 2, 4;`,
@@ -96,8 +96,8 @@ let queries = {
           ) as fk_sq
         ) as foreign_key
       FROM
-        pg_attribute a
-        LEFT JOIN pg_index primaryIndex ON primaryIndex.indrelid = a.attrelid AND a.attnum = ANY(primaryIndex.indkey) AND primaryIndex.indisprimary = true
+        nz_attribute a
+        LEFT JOIN nz_index primaryIndex ON primaryIndex.indrelid = a.attrelid AND a.attnum = ANY(primaryIndex.indkey) AND primaryIndex.indisprimary = true
       WHERE
         a.attrelid = $1::regclass AND
         a.attnum > 0 AND
@@ -122,8 +122,8 @@ let queries = {
           ) 
         END as foreign_key
       FROM
-        pg_attribute a
-        LEFT JOIN pg_index primaryIndex ON primaryIndex.indrelid = a.attrelid AND a.attnum = ANY(primaryIndex.indkey) AND primaryIndex.indisprimary = true
+        nz_attribute a
+        LEFT JOIN nz_index primaryIndex ON primaryIndex.indrelid = a.attrelid AND a.attnum = ANY(primaryIndex.indkey) AND primaryIndex.indisprimary = true
         LEFT JOIN (
           SELECT tc.constraint_name, kcu.column_name,
             ccu.table_catalog as fk_catalog,
@@ -161,19 +161,19 @@ let queries = {
       SELECT n.nspname as "schema",
         p.proname as "name",
         d.description,
-        pg_catalog.pg_get_function_result(p.oid) as "result_type",
-        pg_catalog.pg_get_function_arguments(p.oid) as "argument_types",
+        nz_catalog.nz_get_function_result(p.oid) as "result_type",
+        nz_catalog.nz_get_function_arguments(p.oid) as "argument_types",
       CASE
         WHEN p.prokind = 'a' THEN 'agg'
         WHEN p.prokind = 'w' THEN 'window'
-        WHEN p.prorettype = 'pg_catalog.trigger'::pg_catalog.regtype THEN 'trigger'
+        WHEN p.prorettype = 'nz_catalog.trigger'::nz_catalog.regtype THEN 'trigger'
         ELSE 'normal'
       END as "type"
-      FROM pg_catalog.pg_proc p
-          LEFT JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace
-          LEFT JOIN pg_catalog.pg_description d ON p.oid = d.objoid
+      FROM nz_catalog.nz_proc p
+          LEFT JOIN nz_catalog.nz_namespace n ON n.oid = p.pronamespace
+          LEFT JOIN nz_catalog.nz_description d ON p.oid = d.objoid
       WHERE n.nspname = $1
-        AND p.prorettype <> 'pg_catalog.trigger'::pg_catalog.regtype
+        AND p.prorettype <> 'nz_catalog.trigger'::nz_catalog.regtype
         AND has_schema_privilege(n.oid, 'USAGE') = true
         AND has_function_privilege(p.oid, 'execute') = true
       ORDER BY 1, 2, 4;`,
@@ -181,20 +181,20 @@ let queries = {
       SELECT n.nspname as "schema",
         p.proname as "name",
         d.description,
-        pg_catalog.pg_get_function_result(p.oid) as "result_type",
-        pg_catalog.pg_get_function_arguments(p.oid) as "argument_types",
+        nz_catalog.nz_get_function_result(p.oid) as "result_type",
+        nz_catalog.nz_get_function_arguments(p.oid) as "argument_types",
       CASE
         WHEN p.prokind = 'a' THEN 'agg'
         WHEN p.prokind = 'w' THEN 'window'
-        WHEN p.prorettype = 'pg_catalog.trigger'::pg_catalog.regtype THEN 'trigger'
+        WHEN p.prorettype = 'nz_catalog.trigger'::nz_catalog.regtype THEN 'trigger'
         ELSE 'normal'
       END as "type"
-      FROM pg_catalog.pg_proc p
-          LEFT JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace
-          LEFT JOIN pg_catalog.pg_description d ON p.oid = d.objoid
+      FROM nz_catalog.nz_proc p
+          LEFT JOIN nz_catalog.nz_namespace n ON n.oid = p.pronamespace
+          LEFT JOIN nz_catalog.nz_description d ON p.oid = d.objoid
       WHERE n.nspname <> 'information_schema'
-        AND pg_catalog.pg_function_is_visible(p.oid)
-        AND p.prorettype <> 'pg_catalog.trigger'::pg_catalog.regtype
+        AND nz_catalog.nz_function_is_visible(p.oid)
+        AND p.prorettype <> 'nz_catalog.trigger'::nz_catalog.regtype
         AND has_schema_privilege(n.oid, 'USAGE') = true
         AND has_function_privilege(p.oid, 'execute') = true
       ORDER BY 1, 2, 4;`

@@ -16,10 +16,10 @@ export class SchemaNode implements INode {
     return {
       label: this.schemaName,
       collapsibleState: TreeItemCollapsibleState.Collapsed,
-      contextValue: 'vscode-postgres.tree.schema',
+      contextValue: 'vscode-netezza.tree.schema',
       command: {
         title: 'select-database',
-        command: 'vscode-postgres.setActiveConnection',
+        command: 'vscode-netezza.setActiveConnection',
         arguments: [ this.connection ]
       },
       iconPath: {
@@ -41,8 +41,8 @@ export class SchemaNode implements INode {
         (c.relkind = 'f') as is_foreign,
         n.nspname as "schema"
       FROM
-        pg_catalog.pg_class c
-        JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        nz_catalog.nz_class c
+        JOIN nz_catalog.nz_namespace n ON n.oid = c.relnamespace
       WHERE
         c.relkind in ('r', 'v', 'm', 'f')
         AND n.nspname = $1

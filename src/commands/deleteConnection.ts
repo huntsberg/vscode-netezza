@@ -1,7 +1,7 @@
 import BaseCommand from "../common/baseCommand";
 import * as vscode from 'vscode';
 import { ConnectionNode } from "../tree/connectionNode";
-import { PostgreSQLTreeDataProvider } from "../tree/treeProvider";
+import { NetezzaTreeDataProvider } from "../tree/treeProvider";
 import { IConnection } from "../common/IConnection";
 import { Constants } from "../common/constants";
 import { Global } from "../common/global";
@@ -41,7 +41,7 @@ export class deleteConnectionCommand extends BaseCommand {
     await Global.context.globalState.update(Constants.GlobalStateKey, connections);
     await Global.context.secrets.delete(key);
 
-    PostgreSQLTreeDataProvider.getInstance().refresh();
+    NetezzaTreeDataProvider.getInstance().refresh();
     vscode.window.showInformationMessage('Connection Deleted');
   }
 }

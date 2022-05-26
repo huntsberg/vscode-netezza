@@ -5,7 +5,7 @@ import { ExtensionContext } from 'vscode';
 import { IConnection } from '../common/IConnection';
 import { EditorState } from '../common/editorState';
 
-export default class PostgreSQLLanguageClient {
+export default class NetezzaLanguageClient {
 
   public client: LanguageClient;
   private lang_server_ready: boolean;
@@ -22,12 +22,12 @@ export default class PostgreSQLLanguageClient {
 
     let clientOptions: LanguageClientOptions = {
       documentSelector: [
-        { language: 'postgres', scheme: 'file' },
-        { language: 'postgres', scheme: 'untitled' }
+        { language: 'netezza', scheme: 'file' },
+        { language: 'netezza', scheme: 'untitled' }
       ]
     };
 
-    this.client = new LanguageClient('postgres', 'PostgreSQL Service', serverOptions, clientOptions);
+    this.client = new LanguageClient('netezza', 'Netezza Service', serverOptions, clientOptions);
     this.client.onReady().then(async () => {
       this.lang_server_ready = true;
       EditorState.connection = await EditorState.getDefaultConnection();

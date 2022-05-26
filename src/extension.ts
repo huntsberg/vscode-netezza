@@ -4,8 +4,8 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import PostgreSQLLanguageClient from './language/client';
-import { PostgreSQLTreeDataProvider } from './tree/treeProvider';
+import NetezzaLanguageClient from './language/client';
+import { NetezzaTreeDataProvider } from './tree/treeProvider';
 import { Global } from './common/global';
 import { EditorState } from './common/editorState';
 import { ConfigFS } from './common/configFileSystem';
@@ -21,8 +21,8 @@ export async function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
   console.log(`Congratulations, your extension "${context.extension.id}" is now active!`);
-  let languageClient: PostgreSQLLanguageClient = new PostgreSQLLanguageClient(context);
-  let treeProvider: PostgreSQLTreeDataProvider = PostgreSQLTreeDataProvider.getInstance(context);
+  let languageClient: NetezzaLanguageClient = new NetezzaLanguageClient(context);
+  let treeProvider: NetezzaTreeDataProvider = NetezzaTreeDataProvider.getInstance(context);
   Global.context = context;
   EditorState.getInstance(languageClient);
 
@@ -50,7 +50,7 @@ export async function activate(context: vscode.ExtensionContext) {
   });
 
   const configFS = new ConfigFS();
-  context.subscriptions.push(vscode.workspace.registerFileSystemProvider('postgres-config', configFS, {isCaseSensitive: true}));
+  context.subscriptions.push(vscode.workspace.registerFileSystemProvider('netezza-config', configFS, {isCaseSensitive: true}));
 
   // EditorState.connection = null;
   // if (vscode.window && vscode.window.activeTextEditor) {
@@ -60,7 +60,7 @@ export async function activate(context: vscode.ExtensionContext) {
   // }
 
   // prepare for dropping of manual keytar usage
-  const migratedPassword = context.globalState.get<boolean | undefined>('postgresql.connections.pwd-migrated');
+  const migratedPassword = context.globalState.get<boolean | undefined>('netezza.connections.pwd-migrated');
   if (!migratedPassword) {
     const connections = context.globalState.get<{[key: string]: IConnection}>(Constants.GlobalStateKey);
     if (connections) {
@@ -75,7 +75,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }
       }
     }
-    await context.globalState.update('postgresql.connections.pwd-migrated', true);
+    await context.globalState.update('netezza.connections.pwd-migrated', true);
   }
 }
 

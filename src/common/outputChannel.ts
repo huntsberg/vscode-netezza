@@ -3,7 +3,7 @@ import { QueryResults } from './database';
 import { Global } from './global';
 
 export class OutputChannel {
-  private static outputChannel = vscode.window.createOutputChannel('PostgreSQL');
+  private static outputChannel = vscode.window.createOutputChannel('Netezza');
 
   public static show(): void {
     OutputChannel.outputChannel.show(true);

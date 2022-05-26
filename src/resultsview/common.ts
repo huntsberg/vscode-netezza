@@ -20,7 +20,7 @@ export function generateResultsHtml(webview: vscode.Webview, sourceUri: vscode.U
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta id="vscode-postgres-results-data"
+      <meta id="vscode-netezza-results-data"
         data-settings=""
         data-state="${JSON.stringify(state || {}).replace(/"/g, '&quot;')}" />
       <script src="${pageScript}" nonce="${nonce}"></script>
@@ -49,39 +49,39 @@ function getStyles(nonce) {
       padding: 0;
     }
 
-    pre.vscode-postgres-result {
+    pre.vscode-netezza-result {
       margin: 5px;
     }
     
-    pre.vscode-postgres-result-insert {
+    pre.vscode-netezza-result-insert {
     
     }
     
-    pre.vscode-postgres-result-update {
+    pre.vscode-netezza-result-update {
       
     }
     
-    pre.vscode-postgres-result-create {
+    pre.vscode-netezza-result-create {
       
     }
     
-    pre.vscode-postgres-result-delete {
+    pre.vscode-netezza-result-delete {
       
     }
     
-    pre.vscode-postgres-result-explain {
+    pre.vscode-netezza-result-explain {
       
     }
     
-    pre.vscode-postgres-result-generic {
+    pre.vscode-netezza-result-generic {
       
     }
     
-    pre.vscode-postgres-result-message {
+    pre.vscode-netezza-result-message {
       
     }
 
-    pre.vscode-postgres-result-select {
+    pre.vscode-netezza-result-select {
       
     }
 
@@ -185,19 +185,19 @@ function generateDeleteResults(result: QueryResults): string {
 
 function getRowCountResult(rowCount: number, text: string, preClass: string): string {
   let rowOrRows = rowCount === 1 ? 'row' : 'rows';
-  return `<pre class="vscode-postgres-result vscode-postgres-result-${preClass}">${rowCount} ${rowOrRows} ${text}</pre>`;
+  return `<pre class="vscode-netezza-result vscode-netezza-result-${preClass}">${rowCount} ${rowOrRows} ${text}</pre>`;
 }
 
 function generateExplainResult(result: QueryResults): string {
-  return `<pre class="vscode-postgres-result vscode-postgres-result-explain">${result.rows.join("\n")}</pre>`;
+  return `<pre class="vscode-netezza-result vscode-netezza-result-explain">${result.rows.join("\n")}</pre>`;
 }
 
 function generateGenericResult(result: QueryResults): string {
-  return `<pre class="vscode-postgres-result vscode-postgres-result-generic">${JSON.stringify(result)}</pre>`;
+  return `<pre class="vscode-netezza-result vscode-netezza-result-generic">${JSON.stringify(result)}</pre>`;
 }
 
 function generateMessage(result: QueryResults): string {
-  return `<pre class="vscode-postgres-result vscode-postgres-result-message">${result.message}</pre>`;
+  return `<pre class="vscode-netezza-result vscode-netezza-result-message">${result.message}</pre>`;
 }
 
 function generateSelectResult(result: QueryResults): string {

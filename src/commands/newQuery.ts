@@ -8,7 +8,7 @@ import { EditorState } from "../common/editorState";
 export class newQueryCommand extends BaseCommand {
   async run(treeNode: any) {
     // should have a connection object on it
-    const textDocument = await vscode.workspace.openTextDocument({content: '', language: 'postgres'});
+    const textDocument = await vscode.workspace.openTextDocument({content: '', language: 'netezza'});
     await vscode.window.showTextDocument(textDocument);
     if (treeNode && treeNode.connection)
       EditorState.connection = treeNode.connection;

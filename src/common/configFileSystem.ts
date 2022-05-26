@@ -6,7 +6,7 @@ import * as path from 'path';
 import { Global } from './global';
 import { IConnection } from './IConnection';
 import { Constants } from './constants';
-import { PostgreSQLTreeDataProvider } from '../tree/treeProvider';
+import { NetezzaTreeDataProvider } from '../tree/treeProvider';
 
 // writeFile (uri, buffer.from(), {create: true, overwrite: true})
 export class ConfigFile implements vscode.FileStat {
@@ -57,7 +57,7 @@ export class ConfigFS implements vscode.FileSystemProvider {
   }
 
   createDirectory(uri: vscode.Uri): void {
-    throw vscode.FileSystemError.NoPermissions('Unable to create pg-config directories');
+    throw vscode.FileSystemError.NoPermissions('Unable to create nz-config directories');
   }
 
   readFile(uri: vscode.Uri): Promise<Uint8Array> {
@@ -91,7 +91,7 @@ export class ConfigFS implements vscode.FileSystemProvider {
     connection.hasPassword = !!pwd;
 
     connections[connectionKey] = connection;
-    const tree = PostgreSQLTreeDataProvider.getInstance();
+    const tree = NetezzaTreeDataProvider.getInstance();
 
     if (connection.hasPassword) {
       await Global.context.secrets.store(connectionKey, pwd);
@@ -102,11 +102,11 @@ export class ConfigFS implements vscode.FileSystemProvider {
   }
 
   delete(uri: vscode.Uri): void {
-    throw vscode.FileSystemError.NoPermissions('Unable to delete pg-config entries');
+    throw vscode.FileSystemError.NoPermissions('Unable to delete nz-config entries');
   }
 
   rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: {overwrite: boolean}): void {
-    throw vscode.FileSystemError.NoPermissions('Unable to rename pg-config entries');
+    throw vscode.FileSystemError.NoPermissions('Unable to rename nz-config entries');
   }
 
   private async _lookup(uri: vscode.Uri, silent: boolean): Promise<ConfigFile> {

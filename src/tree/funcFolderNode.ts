@@ -16,7 +16,7 @@ export class FunctionFolderNode implements INode {
     return {
       label: "Functions",
       collapsibleState: TreeItemCollapsibleState.Collapsed,
-      contextValue: 'vscode-postgres.tree.function-folder',
+      contextValue: 'vscode-netezza.tree.function-folder',
       iconPath: {
         light: path.join(__dirname, `../../resources/light/func-folder.svg`),
         dark: path.join(__dirname, `../../resources/dark/func-folder.svg`)
@@ -28,7 +28,7 @@ export class FunctionFolderNode implements INode {
     const connection = await Database.createConnection(this.connection);
 
     try {
-      let query = SqlQueryManager.getVersionQueries(connection.pg_version);
+      let query = SqlQueryManager.getVersionQueries(connection.nz_version);
       const res = await connection.query(query.GetFunctions, [this.schemaName]);
 
       return res.rows.map<FunctionNode>(func => {

@@ -4,7 +4,7 @@
 <dict>
 	<key>fileTypes</key>
 	<array>
-		<string>pgsql</string>
+		<string>nzsql</string>
 		<string>psql</string>
 	</array>
 	<key>foldingStartMarker</key>
@@ -12,7 +12,7 @@
 	<key>foldingStopMarker</key>
 	<string>^\s*\)</string>
 	<key>name</key>
-	<string>SQL (PostgreSQL)</string>
+	<string>SQL (Netezza)</string>
 	<key>patterns</key>
 	<array>
 		<dict>
@@ -27,28 +27,28 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.create.pgsql</string>
+					<string>keyword.other.create.nzsql</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.pgsql</string>
+					<string>keyword.other.nzsql</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.pgsql</string>
+					<string>keyword.other.nzsql</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function.pgsql</string>
+					<string>entity.name.function.nzsql</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>;\s*</string>
 			<key>name</key>
-			<string>meta.statement.pgsql.create</string>
+			<string>meta.statement.nzsql.create</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -81,28 +81,28 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.create.pgsql</string>
+					<string>keyword.other.create.nzsql</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.pgsql</string>
+					<string>keyword.other.nzsql</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.pgsql</string>
+					<string>keyword.other.nzsql</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function.pgsql</string>
+					<string>entity.name.function.nzsql</string>
 				</dict>
 			</dict>
 			<key>end</key>
 			<string>;\s*</string>
 			<key>name</key>
-			<string>meta.statement.pgsql.create</string>
+			<string>meta.statement.nzsql.create</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -135,15 +135,15 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.pgsql</string>
+					<string>keyword.other.nzsql</string>
 				</dict>
 			</dict>
 			<key>comment</key>
-			<string>Last update (including keywords below) using postgres 9.3. See classes/Help.php for update method. Testing change below to just assume starting word is a SQL keyword.</string>
+			<string>Last update (including keywords below) using netezza 9.3. See classes/Help.php for update method. Testing change below to just assume starting word is a SQL keyword.</string>
 			<key>end</key>
 			<string>;\s*</string>
 			<key>name</key>
-			<string>meta.statement.pgsql</string>
+			<string>meta.statement.nzsql</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -176,7 +176,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>meta.preprocessor.pgsql</string>
+					<string>meta.preprocessor.nzsql</string>
 				</dict>
 			</dict>
 			<key>comment</key>
@@ -184,7 +184,7 @@
 			<key>end</key>
 			<string>\n</string>
 			<key>name</key>
-			<string>meta.statement.pgsql.psql</string>
+			<string>meta.statement.nzsql.psql</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -199,13 +199,13 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.comment.pgsql</string>
+							<string>punctuation.definition.comment.nzsql</string>
 						</dict>
 					</dict>
 					<key>match</key>
 					<string>(--).*$\n?</string>
 					<key>name</key>
-					<string>comment.line.double-dash.pgsql</string>
+					<string>comment.line.double-dash.nzsql</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -215,7 +215,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.comment.pgsql</string>
+							<string>punctuation.definition.comment.nzsql</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -238,7 +238,7 @@
 					<key>end</key>
 					<string>\1</string>
 					<key>name</key>
-					<string>meta.dollar-quote.pgsql</string>
+					<string>meta.dollar-quote.nzsql</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -275,7 +275,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.other.pgsql</string>
+							<string>keyword.other.nzsql</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -291,31 +291,31 @@
 					<key>match</key>
 					<string>\b\d+\b</string>
 					<key>name</key>
-					<string>constant.numeric.pgsql</string>
+					<string>constant.numeric.nzsql</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\*</string>
 					<key>name</key>
-					<string>keyword.operator.star.pgsql</string>
+					<string>keyword.operator.star.nzsql</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>[!&lt;&gt;]?=|&lt;&gt;|&lt;|&gt;</string>
 					<key>name</key>
-					<string>keyword.operator.comparison.pgsql</string>
+					<string>keyword.operator.comparison.nzsql</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>-|\+|/</string>
 					<key>name</key>
-					<string>keyword.operator.math.pgsql</string>
+					<string>keyword.operator.math.nzsql</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\|\|</string>
 					<key>name</key>
-					<string>keyword.operator.concatenator.pgsql</string>
+					<string>keyword.operator.concatenator.nzsql</string>
 				</dict>
 			</array>
 		</dict>
@@ -324,7 +324,7 @@
 			<key>match</key>
 			<string>\\.</string>
 			<key>name</key>
-			<string>constant.character.escape.pgsql</string>
+			<string>constant.character.escape.nzsql</string>
 		</dict>
 		<key>strings</key>
 		<dict>
@@ -336,12 +336,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.begin.pgsql</string>
+							<string>punctuation.definition.string.begin.nzsql</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.end.pgsql</string>
+							<string>punctuation.definition.string.end.nzsql</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -349,7 +349,7 @@
 					<key>match</key>
 					<string>(')[^'\\]*(')</string>
 					<key>name</key>
-					<string>string.quoted.single.pgsql</string>
+					<string>string.quoted.single.nzsql</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -359,7 +359,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.begin.pgsql</string>
+							<string>punctuation.definition.string.begin.nzsql</string>
 						</dict>
 					</dict>
 					<key>comment</key>
@@ -371,11 +371,11 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.end.pgsql</string>
+							<string>punctuation.definition.string.end.nzsql</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>string.quoted.single.pgsql</string>
+					<string>string.quoted.single.nzsql</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -390,7 +390,7 @@
 					<key>match</key>
 					<string>(")[^"#]*(")</string>
 					<key>name</key>
-					<string>variable.other.pgsql</string>
+					<string>variable.other.nzsql</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -400,13 +400,13 @@
 					<key>end</key>
 					<string>\1</string>
 					<key>name</key>
-					<string>string.unquoted.dollar.pgsql</string>
+					<string>string.unquoted.dollar.nzsql</string>
 				</dict>
 			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>
-	<string>source.pgsql</string>
+	<string>source.nzsql</string>
 	<key>uuid</key>
 	<string>4D6B679D-111C-4529-B558-3F25487D9E27</string>
 </dict>

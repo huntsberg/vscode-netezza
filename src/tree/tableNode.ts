@@ -6,7 +6,7 @@ import { Database } from '../common/database';
 import { InfoNode } from './infoNode';
 import { ColumnNode } from './columnNode';
 import { Global } from '../common/global';
-import { QueryResult } from 'pg';
+import { QueryResult } from 'nz';
 import { SqlQueryManager } from '../queries';
 
 export class TableNode implements INode {
@@ -31,7 +31,7 @@ export class TableNode implements INode {
     return {
       label: this.table,
       collapsibleState: TreeItemCollapsibleState.Collapsed,
-      contextValue: 'vscode-postgres.tree.table',
+      contextValue: 'vscode-netezza.tree.table',
       iconPath: {
         light: path.join(__dirname, `../../resources/light/${iconName}.svg`),
         dark: path.join(__dirname, `../../resources/dark/${iconName}.svg`)
@@ -51,7 +51,7 @@ export class TableNode implements INode {
     if (!sortOptions[configSort]) sortOptions[configSort] = 'a.attnum';
 
     let tableSchema = this.schema ? this.schema : 'public';
-    let query = SqlQueryManager.getVersionQueries(connection.pg_version);
+    let query = SqlQueryManager.getVersionQueries(connection.nz_version);
     
     try {
       let res: QueryResult = null;

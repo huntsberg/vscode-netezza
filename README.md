@@ -83,8 +83,8 @@ This extension contributes the following settings:
 * `vscode-netezza.defaultConnection`: set the default connection (by name) that should be used for any file.
 * `vscode-netezza.defaultDatabase`: set the default database on the default connection that should be used for any file (must exist on server).
 
-The base for this extension is the vscode-postgres project.  As the Netezza query language is based on an older dialect of PostgreSQL it is not likely that new features added to vscode-postgres will make it into this project.  Pull requests welcomed.
+The base for this extension is the vscode-netezza project.  As the Netezza query language is based on an older dialect of Netezza it is not likely that new features added to vscode-netezza will make it into this project.  Pull requests welcomed.
 
-Thank you to Borvik and the rest of the vscode-postgres team for the head start.
+Thank you to Borvik and the rest of the vscode-netezza team for the head start.
 
 
